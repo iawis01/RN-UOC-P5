@@ -15,6 +15,8 @@ import { AntDesign } from '@expo/vector-icons';
 import { db } from '../db/firebaseConfig';
 import { collection, onSnapshot } from 'firebase/firestore';
 import Reto from '../components/Reto';
+import { ProgressBar } from 'react-native-paper';
+
 
 const buttonStyle = {
 	bottom: 0,
@@ -31,19 +33,33 @@ const buttonStyle = {
 	borderRadius: 50,
 };
 
+//
+
+
 const Evolucion = () => {
 	const tw = useTailwind();
 	const navigation = useNavigation();
 	const [selectedId, setSelectedId] = useState(null);
-
 	const [goals, setGoals] = useState([]);
 
+	const [loading, setLoading] = useState(true);
+	const [status, setStatus] = useState(0.0) ;
+	
 	// Base de datos
 	useEffect(() => {
+		setTimeout(() => setStatus(0.25), 1000);
+		setTimeout(() => setStatus(0.50), 1500);
+		//setLoading(true);
 		try {
-			onSnapshot(collection(db, 'retos'), snapshot => {
-				setGoals(snapshot.docs.map(doc => doc.data()));
+			setTimeout(() => setStatus(0.75), 2000);
+			onSnapshot(collection(db, 'retos'), async snapshot => {
+			  setGoals(snapshot.docs.map(doc => doc.data()));
+				
+				setTimeout(() => setStatus(1), 2500);
+				setTimeout(() => setLoading(false), 3000);
+				
 			});
+
 		} catch (error) {
 			console.log(error);
 		}
@@ -82,9 +98,9 @@ const Evolucion = () => {
 
 	// Renderizar los retos en el FlatList
 	const renderItem = ({ item }) => {
-		// const backgroundColor = item.id === selectedId ? '#6e3b6e' : '#f9c2ff';
-		// const color = item.id === selectedId ? 'white' : 'black';
+
 		return (
+			
 			<Reto
 				key={item.id}
 				nombre={item.nombre}
@@ -98,38 +114,14 @@ const Evolucion = () => {
 		);
 	};
 
-	return (
-		// <View style={{ backgroundColor: '#95d7e7' }} flex={1}>
+	return (	
 		<View style={tw('bg-mainBlue flex-1')}>
+			{loading && <ProgressBar style={{marginTop: 400}}progress={status} color="#49B5F2" />}
 			<Image
 				source={require('../assets/evolucion.jpg')}
 				containerStyle={{ width: '100%', aspectRatio: 3 / 2 }}
 				PlaceholderContent={<ActivityIndicator />}
 			/>
-
-			{/* <TouchableOpacity style={buttonStyle}>
-				<Button
-					title='Evolucion'
-					onPress={() => navigation.navigate('Evolucion')}
-				/>
-			</TouchableOpacity> */}
-			{/* <ScrollView
-				flex={1}
-				space={1}
-				mt='-20px'
-				borderTopLeftRadius='20px'
-				borderTopRightRadius='20px'
-				pt='20px'
-			>
-				{goals.map((item, id) => (
-					<Reto
-						key={id}
-						nombre={item.nombre}
-						detalle={item.detalle}
-						completado={item.completado}
-					/>
-				))}
-			</ScrollView> */}
 
 			<FlatList
 				data={goals}
@@ -143,20 +135,7 @@ const Evolucion = () => {
 					onPress={() => navigation.navigate('NuevoReto')}
 				/>
 			</TouchableOpacity>
-			{/* 
-			<TouchableOpacity style={buttonStyle}>
-				<Button
-					title='Retos Completados'
-					onPress={() => navigation.navigate('Completados')}
-				/>
-			</TouchableOpacity>
 
-			<TouchableOpacity style={buttonStyle}>
-				<Button
-					title='Retos Activos'
-					onPress={() => navigation.navigate('Activos')}
-				/>
-			</TouchableOpacity> */}
 		</View>
 	);
 };
