@@ -47,16 +47,16 @@ const Evolucion = () => {
 	
 	// Base de datos
 	useEffect(() => {
-		setTimeout(() => setStatus(0.25), 1000);
-		setTimeout(() => setStatus(0.50), 1500);
+		setTimeout(() => setStatus(0.25), 500);
+		setTimeout(() => setStatus(0.50), 1000);
 		//setLoading(true);
 		try {
-			setTimeout(() => setStatus(0.75), 2000);
+			setTimeout(() => setStatus(0.75), 1500);
 			onSnapshot(collection(db, 'retos'), async snapshot => {
 			  setGoals(snapshot.docs.map(doc => doc.data()));
 				
-				setTimeout(() => setStatus(1), 2500);
-				setTimeout(() => setLoading(false), 3000);
+				setTimeout(() => setStatus(1), 2000);
+				setTimeout(() => setLoading(false), 2500);
 				
 			});
 
