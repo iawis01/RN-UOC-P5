@@ -54,9 +54,9 @@
 			[
 				"expo-notifications",
 				{
-					"icon": "./assets/icono.png",
+					"icon": "./local/assets/icono.png",
 					"color": "#ffffff",
-					"sounds": ["./assets/alert.mp3"]
+					"sounds": ["./local/assets/alert.mp3"]
 				}
 			]
 		]
