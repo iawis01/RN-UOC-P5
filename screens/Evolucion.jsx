@@ -16,7 +16,7 @@ import { db } from '../db/firebaseConfig';
 import { collection, onSnapshot } from 'firebase/firestore';
 import Reto from '../components/Reto';
 import { ProgressBar } from 'react-native-paper';
-
+import * as Notifications from 'expo-notifications';
 
 const buttonStyle = {
 	bottom: 0,
@@ -33,8 +33,16 @@ const buttonStyle = {
 	borderRadius: 50,
 };
 
-//
-
+// Handling notifications
+Notifications.setNotificationHandler({
+	handleNotification: async () => {
+		return {
+			shouldPlaySound: true,
+			shouldSetBadge: true,
+			shouldShowAlert: true,
+		};
+	},
+});
 
 const Evolucion = () => {
 	const tw = useTailwind();
@@ -43,27 +51,50 @@ const Evolucion = () => {
 	const [goals, setGoals] = useState([]);
 
 	const [loading, setLoading] = useState(true);
-	const [status, setStatus] = useState(0.0) ;
-	
+	const [status, setStatus] = useState(0.0);
+
+	// Notificaciones Handler
+	function scheduleNotificationHandler() {
+		Notifications.scheduleNotificationAsync({
+			content: {
+				title: 'tituleo',
+				body: 'del bueno',
+				data: { userName: 'Alburno' },
+			},
+			trigger: {
+				seconds: 1,
+			},
+		});
+	}
+
+	useEffect(() => {
+		let value = 0.0;
+		setLoading(true);
+		const interval = setInterval(() => {
+			value += 0.01;
+			setStatus(value);
+			if (value >= 1) {
+				clearInterval(interval);
+				setLoading(false);
+			}
+		}, 30);
+	}, []);
+
 	// Base de datos
 	useEffect(() => {
-		setTimeout(() => setStatus(0.25), 500);
-		setTimeout(() => setStatus(0.50), 1000);
-		//setLoading(true);
 		try {
-			setTimeout(() => setStatus(0.75), 1500);
 			onSnapshot(collection(db, 'retos'), async snapshot => {
-			  setGoals(snapshot.docs.map(doc => doc.data()));
-				
-				setTimeout(() => setStatus(1), 2000);
-				setTimeout(() => setLoading(false), 2500);
-				
+				setGoals(snapshot.docs.map(doc => doc.data()));
 			});
-
 		} catch (error) {
 			console.log(error);
 		}
-	}, [goals]);
+	}, []);
+
+	useEffect(() => {
+		// Activar notificaciones
+		scheduleNotificationHandler();
+	}, []);
 
 	// Estilo del Header
 	useLayoutEffect(() => {
@@ -98,9 +129,7 @@ const Evolucion = () => {
 
 	// Renderizar los retos en el FlatList
 	const renderItem = ({ item }) => {
-
 		return (
-			
 			<Reto
 				key={item.id}
 				nombre={item.nombre}
@@ -114,28 +143,35 @@ const Evolucion = () => {
 		);
 	};
 
-	return (	
+	return (
 		<View style={tw('bg-mainBlue flex-1')}>
-			{loading && <ProgressBar style={{marginTop: 400}}progress={status} color="#49B5F2" />}
 			<Image
 				source={require('../assets/evolucion.jpg')}
 				containerStyle={{ width: '100%', aspectRatio: 3 / 2 }}
 				PlaceholderContent={<ActivityIndicator />}
 			/>
-
-			<FlatList
-				data={goals}
-				renderItem={renderItem}
-				keyExtractor={item => item.id}
-				extraData={selectedId}
-			/>
-			<TouchableOpacity style={buttonStyle}>
-				<Button
-					title='Nuevo Reto'
-					onPress={() => navigation.navigate('NuevoReto')}
+			{loading ? (
+				<ProgressBar
+					style={{ marginTop: 100 }}
+					progress={status}
+					color='#49B5F2'
 				/>
-			</TouchableOpacity>
-
+			) : (
+				<>
+					<FlatList
+						data={goals}
+						renderItem={renderItem}
+						keyExtractor={item => item.id}
+						extraData={selectedId}
+					/>
+					<TouchableOpacity style={buttonStyle}>
+						<Button
+							title='Nuevo Reto'
+							onPress={() => navigation.navigate('NuevoReto')}
+						/>
+					</TouchableOpacity>
+				</>
+			)}
 		</View>
 	);
 };

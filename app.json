@@ -1,57 +1,65 @@
 {
-  "expo": {
-    "name": "RN_UOC_P5",
-    "slug": "rn_uoc_p5",
-    "sdkVersion": "46.0.0",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "platforms":["ios", "android"],
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#DDB499"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "bundleIdentifier": "com.reactivados.rnuocp5",
-      "buildNumber": "1.0.0",
-      "supportsTablet": true,
-      "icon": "./assets/iconios.png",
-      "splash": {
-        "image": "./assets/splashios.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#DDB499"
-      },
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptative-iconios.png",
-        "backgroundColor": "#FFFFFF"
-      }
-    },
-    "android": {
-      "package": "com.reactivados.rnuocp5",
-      "versionCode": 1,
-      "icon": "./assets/iconandroid.png",
-      "splash": {
-        "image": "./assets/splashandroid.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#DDB499"
-      },
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptative-iconandroid.png",
-        "backgroundColor": "#FFFFFF"
-      }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
+	"expo": {
+		"name": "RN_UOC_P5",
+		"slug": "rn_uoc_p5",
+		"sdkVersion": "46.0.0",
+		"version": "1.0.0",
+		"orientation": "portrait",
+		"icon": "./assets/icon.png",
+		"userInterfaceStyle": "light",
+		"platforms": ["ios", "android"],
+		"splash": {
+			"image": "./assets/splash.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#DDB499"
+		},
+		"updates": {
+			"fallbackToCacheTimeout": 0
+		},
+		"assetBundlePatterns": ["**/*"],
+		"ios": {
+			"bundleIdentifier": "com.reactivados.rnuocp5",
+			"buildNumber": "1.0.0",
+			"supportsTablet": true,
+			"icon": "./assets/iconios.png",
+			"splash": {
+				"image": "./assets/splashios.png",
+				"resizeMode": "contain",
+				"backgroundColor": "#DDB499"
+			},
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/adaptative-iconios.png",
+				"backgroundColor": "#FFFFFF"
+			}
+		},
+		"android": {
+			"package": "com.reactivados.rnuocp5",
+			"versionCode": 1,
+			"icon": "./assets/iconandroid.png",
+			"splash": {
+				"image": "./assets/splashandroid.png",
+				"resizeMode": "contain",
+				"backgroundColor": "#DDB499"
+			},
+			"adaptiveIcon": {
+				"foregroundImage": "./assets/adaptative-iconandroid.png",
+				"backgroundColor": "#FFFFFF"
+			}
+		},
+		"web": {
+			"favicon": "./assets/favicon.png"
+		},
 
-    "owner": "iposse"
-  }
+		"owner": "iposse",
+		"plugins": [
+			[
+				"expo-notifications",
+				{
+					"icon": "./local/assets/icono.png",
+					"color": "#ffffff",
+					"sounds": ["./local/assets/alert.mp3"]
+				}
+			]
+		]
+	}
 }
