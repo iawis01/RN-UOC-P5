@@ -49,21 +49,57 @@ const Evolucion = () => {
 	const navigation = useNavigation();
 	const [selectedId, setSelectedId] = useState(null);
 	const [goals, setGoals] = useState([]);
-
+	const [token, setToken] = useState('');
 	const [loading, setLoading] = useState(true);
 	const [status, setStatus] = useState(0.0);
 
-	// Notificaciones Handler
+	// Conseguir el token
+	// Pedir permisos para las push notifications
+	useEffect(() => {
+		async function configurePushNotifications() {
+			const { status } = await Notifications.getPermissionsAsync();
+			let finalStatus = status;
+
+			if (finalStatus !== 'granted') {
+				const { status } = await Notifications.requestPermissionsAsync();
+				finalStatus = status;
+			}
+			if (finalStatus !== 'granted') {
+				Alert.alert('Permission required', 'You must otorgate permissions');
+				return;
+			}
+			const pushTokenData = await Notifications.getExpoPushTokenAsync();
+			console.log(pushTokenData);
+			setToken(pushTokenData);
+
+			if (Platform.OS === 'android') {
+				Notifications.setNotificationChannelAsync('default', {
+					name: 'default',
+					importance: Notifications.AndroidImportance.DEFAULT,
+				});
+			}
+		}
+
+		configurePushNotifications();
+	}, []);
+
+	// Push Notificaciones Handler
 	function scheduleNotificationHandler() {
-		Notifications.scheduleNotificationAsync({
-			content: {
-				title: 'tituleo',
-				body: 'del bueno',
-				data: { userName: 'Alburno' },
-			},
-			trigger: {
-				seconds: 1,
-			},
+		goals.map(goal => {
+			return setTimeout(() => {
+				fetch('https://exp.host/--/api/v2/push/send', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						to: token.data,
+						title: goal.nombre,
+						body: goal.detalle,
+					}),
+				});
+				// ejecutar la notificacion dependiendo de la periodicidad
+			}, goal.periodicidad * 1000);
 		});
 	}
 

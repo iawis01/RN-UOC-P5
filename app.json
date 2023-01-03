@@ -6,6 +6,9 @@
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
+		"notification": {
+			"icon": "./assets/icono.png"
+		},
 		"userInterfaceStyle": "light",
 		"platforms": ["ios", "android"],
 		"splash": {
@@ -26,10 +29,6 @@
 				"image": "./assets/splashios.png",
 				"resizeMode": "contain",
 				"backgroundColor": "#DDB499"
-			},
-			"adaptiveIcon": {
-				"foregroundImage": "./assets/adaptative-iconios.png",
-				"backgroundColor": "#FFFFFF"
 			}
 		},
 		"android": {
@@ -55,9 +54,9 @@
 			[
 				"expo-notifications",
 				{
-					"icon": "./local/assets/icono.png",
+					"icon": "./assets/icono.png",
 					"color": "#ffffff",
-					"sounds": ["./local/assets/alert.mp3"]
+					"sounds": ["./assets/alert.mp3"]
 				}
 			]
 		]

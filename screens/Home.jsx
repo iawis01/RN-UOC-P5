@@ -14,7 +14,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useEffect, useLayoutEffect } from 'react';
 import { Image } from '@rneui/themed';
 import { AntDesign } from '@expo/vector-icons';
-import * as Notifications from 'expo-notifications';
 
 const buttonStyle = {
 	color: 'white',
@@ -29,33 +28,6 @@ const buttonStyle = {
 const Home = () => {
 	const tw = useTailwind();
 	const navigation = useNavigation();
-
-	// Pedir permisos para las push notifications
-	useEffect(() => {
-		async function configurePushNotifications() {
-			const { status } = await Notifications.getPermissionsAsync();
-			let finalStatus = status;
-
-			if (finalStatus !== 'granted') {
-				const { status } = await Notifications.requestPermissionsAsync();
-				finalStatus = status;
-			}
-			if (finalStatus !== 'granted') {
-				Alert.alert('Permission required', 'You must otorgate permissions');
-				return;
-			}
-			const pushTokenData = await Notifications.getExpoPushTokenAsync();
-			console.log(pushTokenData);
-
-			if (Platform.OS === 'android') {
-				Notifications.setNotificationChannelAsync('default', {
-					name: 'default',
-					importance: Notifications.AndroidImportance.DEFAULT,
-				});
-			}
-		}
-		configurePushNotifications();
-	}, []);
 
 	// Estilo del Header
 	useLayoutEffect(() => {
